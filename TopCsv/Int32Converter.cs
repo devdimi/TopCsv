@@ -17,5 +17,7 @@ namespace TopCsvProject
         {
             return this.FromStringTyped(input);
         }
+
+        object IConverter.Default => 0;
     }
 }

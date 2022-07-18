@@ -23,7 +23,7 @@ namespace TopCsvTests
         {
             TopCsv topCsv = new TopCsv();
             
-            MockReader reader = new MockReader(new[] {
+            ReaderForTests reader = new ReaderForTests(new[] {
             "\"Game Number\", \"Game Length\", \"Game Name\"",
             "1, 30, \"The first game\"",
             "2, 29, \"The second game\"",

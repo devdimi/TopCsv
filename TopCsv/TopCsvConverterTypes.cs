@@ -9,7 +9,19 @@ namespace TopCsvProject
     public enum TopCsvConverterTypes
     {
         None,
+
         IntConverter,
-        StringConverter
+
+        StringConverter,
+
+        /// <summary>
+        /// 123,45
+        /// </summary>
+        MoneyConverterNoCurrencyComma,
+
+        /// <summary>
+        /// "USD 124.45" or "EUR 123.32"
+        /// </summary>
+        MoneyConverterCurrencyDot,
     }
 }

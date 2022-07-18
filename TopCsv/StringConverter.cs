@@ -11,5 +11,7 @@ namespace TopCsvProject
         public String FromStringTyped(String input) => input.TrimStart('"', ' ').TrimEnd('"', ' ');
 
         object IConverter.FromString(string input) => input.TrimStart('"', ' ').TrimEnd('"', ' ');
+
+        object IConverter.Default => String.Empty;
     }
 }

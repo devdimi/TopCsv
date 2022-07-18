@@ -16,6 +16,8 @@ namespace TopCsvProject
         {
             { TopCsvConverterTypes.IntConverter, new Int32Converter() },
             { TopCsvConverterTypes.StringConverter, new StringConverter() },
+            { TopCsvConverterTypes.MoneyConverterNoCurrencyComma, new DecimalConverterComma() },
+            { TopCsvConverterTypes.MoneyConverterCurrencyDot, new MoneyConverter() },
         };
 
         public TopCsv(CsvOptions options)
@@ -74,15 +76,33 @@ namespace TopCsvProject
                 {
                     var val = parts[i];
                     object convertedValue = val;
-                    if (attributes[i].Converter != TopCsvConverterTypes.None)
+                    if (attributes[i].Converter != TopCsvConverterTypes.None )
                     {
-                        convertedValue = this.map[attributes[i].Converter].FromString(val);
-                        properties[i].SetValue(entry, convertedValue);
+                        if (!String.IsNullOrEmpty(val))
+                        {
+                            convertedValue = this.map[attributes[i].Converter].FromString(val);
+                        } 
+                        else
+                        {
+                            convertedValue = this.map[attributes[i].Converter].Default;
+                        }
                     }
+
+                    properties[i].SetValue(entry, convertedValue);
+
                 }
 
                 yield return entry;
             }
+        }
+
+        public static object GetDefault(Type type)
+        {
+            if (type.IsValueType)
+            {
+                return Activator.CreateInstance(type);
+            }
+            return null;
         }
     }
 }
