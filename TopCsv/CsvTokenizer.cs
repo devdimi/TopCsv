@@ -1,22 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TopCsvProject
+﻿namespace TopCsvProject
 {
-    public class CsvTokenizer
-    {
-        char[] separators;
-        char[] escapechars;
-        public CsvTokenizer(char[] separators, char[] escapechars)
-        {
-            this.separators = separators;
-            this.escapechars = escapechars;
-        }
-    }
     public static class StringExtensions
     {
         public static CsvTokensEnumerator GetTokens(this string str, char[] separators, char[] escapechars)
@@ -27,6 +10,9 @@ namespace TopCsvProject
         }
     }
 
+    /// <summary>
+    /// This class implements tokenizer user ReadOnlySpan<char>
+    /// </summary>
     public ref struct CsvTokensEnumerator
     {
         private ReadOnlySpan<char> _str;
@@ -51,11 +37,12 @@ namespace TopCsvProject
             ReadOnlySpan<char> span = this._str;
             int startOfToken = 0;
             Int32 length;
-            if(span.Length == 0)
+            if (span.Length == 0)
             {
                 return false;
             }
 
+            ///for 11,"2,2",33, tokens are 11 -> 2,2 -> 33 -> <empty token>
             for (Int32 i = 0; i < span.Length; i++)
             {
                 if (this.separators.Contains(span[i]))
@@ -66,28 +53,34 @@ namespace TopCsvProject
                     }
 
                     length = i - startOfToken;
-                    if(length == 0)
+                    if (length == 0)
                     {
-                        startOfToken = i+1;
-                        continue;
+                        Current = new ReadOnlySpan<char>();
+                        this._str = span.Slice(i + 1);
+                        return true;
                     }
 
-
-                    if (span.Length > startOfToken + length - 1  && this.escapechars.Contains(span[startOfToken+length-1]))
+                    var lastCharOfTokenIndex =  startOfToken + length - 1;
+                    if (lastCharOfTokenIndex >= 0 &&
+                        span.Length > lastCharOfTokenIndex && 
+                        this.escapechars.Contains(span[lastCharOfTokenIndex]))
                     {
+                        //// skip last char as it is escape character
                         length--;
                     }
 
                     var newSlice = span.Slice(startOfToken, length);
                     startOfToken = i;
                     Current = newSlice;
-                    ////if (i == span.Length - 1)
-                    ////{
-                    ////    this._str = new ReadOnlySpan<char>();
-                    ////}
-                    ////else
+                    if (i == span.Length - 1 && this.separators.Contains(span[span.Length - 1]))
                     {
+                        /// special handling of case "3," ending with separator
+                        /// in this case we keep the separator to emit one more empty token
                         this._str = span.Slice(startOfToken);
+                    }
+                    else
+                    {
+                        this._str = span.Slice(startOfToken + 1);
                     }
 
                     return true;
@@ -95,16 +88,15 @@ namespace TopCsvProject
                 else if (this.escapechars.Contains(span[i]))
                 {
                     inToken = !inToken;
-                    if(inToken)
+                    if (inToken)
+                    {
+                        //// skip first char as it is escape character
                         startOfToken = i + 1;
+                    }
                 }
             }
 
-            length = span.Length - startOfToken;
-            var r = span.Slice(startOfToken, length);
-            Current = r;
-            this._str = new ReadOnlySpan<char>();
-            return true;
+            return false;
         }
     }
 
@@ -116,7 +108,7 @@ namespace TopCsvProject
         }
 
         public ReadOnlySpan<char> Token { get; }
-      
+
         // This method allow to deconstruct the type, so you can write any of the following code
         // foreach (var entry in str.SplitLines()) { _ = entry.Line; }
         // foreach (var (line, endOfLine) in str.SplitLines()) { _ = line; }

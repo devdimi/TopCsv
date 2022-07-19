@@ -10,6 +10,12 @@ namespace TopCsvTests
     [TestFixture]
     public class CsvTokenTest
     {
+        // ,,3 -> e, e, 3
+        // ,3  -> e ,3
+        // 3,  -> 3, e
+        // 1,2 -> 1 + 2
+
+
         [Test]
         public void TestSplit()
         {
@@ -88,6 +94,37 @@ namespace TopCsvTests
                 }
                 index++;
             }
+        }
+
+
+        [Test]
+        public void TestSplitEmptyValues()
+        {
+            String line = ",,3,";
+            var tokenizer = line.GetTokens(new[] { ',' }, new char[] { });
+            int index = 0;
+            foreach (var token in tokenizer)
+            {
+                Console.WriteLine(token.ToString());
+                switch (index)
+                {
+                    case 0:
+                        Assert.That(token.Length, Is.EqualTo(0));
+                        break;
+                    case 1:
+                        Assert.That(token.Length, Is.EqualTo(0));
+                        break;
+                    case 2:
+                        Assert.That(token[0], Is.EqualTo('3'));
+                        break;
+                    case 3:
+                        Assert.That(token.Length, Is.EqualTo(0));
+                        break;
+                }
+
+                index++;
+            }
+            Assert.That(index, Is.EqualTo(4));
         }
     }
 }
