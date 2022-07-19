@@ -14,6 +14,7 @@ namespace TopCsvProject
             String strCurrency = input.Substring(0, indexOfSpace);
             String strMoney = input.Substring(indexOfSpace + 1);
             object currencyObj;
+            
             if(!Enum.TryParse(typeof(Currency), strCurrency, out currencyObj))
             {
                 // log
@@ -21,6 +22,7 @@ namespace TopCsvProject
 
             decimal result;
             var style = NumberStyles.Any;
+            
             if (!decimal.TryParse(strMoney, style, this.ci, out result))
             {
                 //// logging
