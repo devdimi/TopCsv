@@ -11,9 +11,9 @@ namespace TopCsvProject
     {
         CultureInfo ci = new CultureInfo("de-DE");
 
-        public object FromString(string input) => this.FromStringTyped(input);
+        public object FromString(ReadOnlySpan<char> input) => this.FromStringTyped(input);
 
-        public decimal FromStringTyped(string input)
+        public decimal FromStringTyped(ReadOnlySpan<char> input)
         {
             decimal result;
             var style = NumberStyles.Any;

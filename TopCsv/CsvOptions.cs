@@ -12,7 +12,13 @@ namespace TopCsvProject
         /// <summary>Gets or sets a value defining whether the the csv file has a header line or not.</summary>
         public bool HasHeader { get; set; }
 
-        /// <summary>Value that separates the entries</summary>
-        public char Separator { get; set; }
+        /// <summary>Gets or sets the separator characters</summary>
+        public char[] Separators { get; set; }
+
+        /// <summary>Gets or sets the escaoe chars
+        /// used when value contains e.g. the separator char</summary>
+        public char[] EscapeChars { get; set; }
+
+
     }
 }

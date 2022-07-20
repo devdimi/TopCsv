@@ -36,7 +36,7 @@
             bool inToken = false;
             ReadOnlySpan<char> span = this._str;
             int startOfToken = 0;
-            Int32 length;
+            
             if (span.Length == 0)
             {
                 return false;
@@ -52,36 +52,7 @@
                         continue;
                     }
 
-                    length = i - startOfToken;
-                    if (length == 0)
-                    {
-                        Current = new ReadOnlySpan<char>();
-                        this._str = span.Slice(i + 1);
-                        return true;
-                    }
-
-                    var lastCharOfTokenIndex =  startOfToken + length - 1;
-                    if (lastCharOfTokenIndex >= 0 &&
-                        span.Length > lastCharOfTokenIndex && 
-                        this.escapechars.Contains(span[lastCharOfTokenIndex]))
-                    {
-                        //// skip last char as it is escape character
-                        length--;
-                    }
-
-                    var newSlice = span.Slice(startOfToken, length);
-                    startOfToken = i;
-                    Current = newSlice;
-                    if (i == span.Length - 1 && this.separators.Contains(span[span.Length - 1]))
-                    {
-                        /// special handling of case "3," ending with separator
-                        /// in this case we keep the separator to emit one more empty token
-                        this._str = span.Slice(startOfToken);
-                    }
-                    else
-                    {
-                        this._str = span.Slice(startOfToken + 1);
-                    }
+                    this.Current = CreateNewSlice(span, startOfToken, i);
 
                     return true;
                 }
@@ -93,10 +64,55 @@
                         //// skip first char as it is escape character
                         startOfToken = i + 1;
                     }
+
+                    if(i == this._str.Length - 1 && !inToken)
+                    {
+                        this.Current = CreateNewSlice(span, startOfToken, i);
+                        return true;
+                    }
                 }
             }
 
             return false;
+        }
+
+        private ReadOnlySpan<char> CreateNewSlice(
+            ReadOnlySpan<char> span, 
+            int startOfToken,
+            int i)
+        {
+            int length = i - startOfToken;
+            if (length == 0)
+            {
+                Current = new ReadOnlySpan<char>();
+                this._str = span.Slice(i + 1);
+                return Current;
+            }
+
+            var lastCharOfTokenIndex = startOfToken + length - 1;
+            if (lastCharOfTokenIndex >= 0 &&
+                span.Length > lastCharOfTokenIndex &&
+                this.escapechars.Contains(span[lastCharOfTokenIndex]))
+            {
+                //// skip last char as it is escape character
+                length--;
+            }
+
+            var newSlice = span.Slice(startOfToken, length);
+            startOfToken = i;
+            Current = newSlice;
+            if (i == span.Length - 1 && this.separators.Contains(span[span.Length - 1]))
+            {
+                /// special handling of case "3," ending with separator
+                /// in this case we keep the separator to emit one more empty token
+                this._str = span.Slice(startOfToken);
+            }
+            else
+            {
+                this._str = span.Slice(startOfToken + 1);
+            }
+
+            return Current;
         }
     }
 

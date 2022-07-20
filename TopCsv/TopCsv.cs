@@ -30,7 +30,8 @@ namespace TopCsvProject
             this.options = new CsvOptions()
             {
                 HasHeader = true,
-                Separator = ','
+                Separators = new[] { ',' },
+                EscapeChars = new[] { '"' }
             };
         }
 
@@ -68,20 +69,24 @@ namespace TopCsvProject
             String line;
             while(null != (line = reader.ReadLine())) 
             {
-                //// ToDo split with span
-                ////var lineSpan = line.AsSpan();
-                var parts = line.Split(this.options.Separator);
+                CsvTokensEnumerator enumerator = 
+                    new CsvTokensEnumerator(
+                        line, 
+                        this.options.Separators,
+                        this.options.EscapeChars
+                        );
+                Int32 i = 0;
                 T entry = new T();
-                for(Int32 i = 0; i < parts.Length; i++)
+                while (enumerator.MoveNext())
                 {
-                    var val = parts[i];
-                    object convertedValue = val;
-                    if (attributes[i].Converter != TopCsvConverterTypes.None )
+                    ReadOnlySpan<char> part = enumerator.Current;
+                    object convertedValue = null;
+                    if (attributes[i].Converter != TopCsvConverterTypes.None)
                     {
-                        if (!String.IsNullOrEmpty(val))
+                        if (!part.IsEmpty)
                         {
-                            convertedValue = this.map[attributes[i].Converter].FromString(val);
-                        } 
+                            convertedValue = this.map[attributes[i].Converter].FromString(part);
+                        }
                         else
                         {
                             convertedValue = this.map[attributes[i].Converter].Default;
@@ -89,20 +94,11 @@ namespace TopCsvProject
                     }
 
                     properties[i].SetValue(entry, convertedValue);
-
+                    i++;
                 }
 
                 yield return entry;
             }
-        }
-
-        public static object GetDefault(Type type)
-        {
-            if (type.IsValueType)
-            {
-                return Activator.CreateInstance(type);
-            }
-            return null;
         }
     }
 }

@@ -4,15 +4,15 @@ namespace TopCsvProject
 {
     public class MoneyConverter : IConverter<Money>
     {
-        public object FromString(string input) => FromStringTyped(input);
+        public object FromString(ReadOnlySpan<char> input) => FromStringTyped(input);
 
         CultureInfo ci = new CultureInfo("en-US");
 
-        public Money FromStringTyped(string input)
+        public Money FromStringTyped(ReadOnlySpan<char> input)
         {
             Int32 indexOfSpace = input.IndexOf(' ');
-            String strCurrency = input.Substring(0, indexOfSpace);
-            String strMoney = input.Substring(indexOfSpace + 1);
+            var strCurrency = input.Slice(0, indexOfSpace);
+            var strMoney = input.Slice(indexOfSpace + 1);
             object currencyObj;
             
             if(!Enum.TryParse(typeof(Currency), strCurrency, out currencyObj))

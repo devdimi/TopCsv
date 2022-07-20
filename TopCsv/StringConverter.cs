@@ -8,9 +8,9 @@ namespace TopCsvProject
 {
     public class StringConverter : IConverter<String>
     {
-        public String FromStringTyped(String input) => input.TrimStart('"', ' ').TrimEnd('"', ' ');
+        public String FromStringTyped(ReadOnlySpan<char> input) => input.ToString();
 
-        object IConverter.FromString(string input) => input.TrimStart('"', ' ').TrimEnd('"', ' ');
+        object IConverter.FromString(ReadOnlySpan<char> input) => input.ToString();
 
         object IConverter.Default => String.Empty;
     }

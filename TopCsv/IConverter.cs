@@ -8,13 +8,13 @@ namespace TopCsvProject
 {
     public interface IConverter
     {
-        public object FromString(String input);
+        public object FromString(ReadOnlySpan<char> input);
 
         public object Default { get; }
     }
 
     public interface IConverter<T> : IConverter
     {
-        public T FromStringTyped(String input);
+        public T FromStringTyped(ReadOnlySpan<char> input);
     }
 }

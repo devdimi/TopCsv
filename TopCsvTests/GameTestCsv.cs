@@ -13,7 +13,7 @@ namespace TopCsvTests
         public Int32 GameLength { get; set; }
 
         [CsvField(Header = "Game Name", Converter = TopCsvConverterTypes.StringConverter)]
-        public String GameName { get; set; }
+        public String? GameName { get; set; }
     }   
 
     public class Tests

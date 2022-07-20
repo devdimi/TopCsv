@@ -126,5 +126,58 @@ namespace TopCsvTests
             }
             Assert.That(index, Is.EqualTo(4));
         }
+
+
+        // "CASH & CASH FUND & FTX CASH (EUR),,,,EUR -0.56,\"-0,56\"",
+        [Test]
+        public void TestImportCashLine()
+        {
+            String line = "CASH & CASH FUND & FTX CASH (EUR),,,,EUR -0.56,\"-0,56\"";
+            var tokenizer = line.GetTokens(new[] { ',' }, new char[] {'"' });
+            int index = 0;
+            foreach (ReadOnlySpan<char> token in tokenizer)
+            {
+                Console.WriteLine(token.ToString());
+                switch (index)
+                {
+                    case 0:
+                        String expected = "CASH & CASH FUND & FTX CASH (EUR)";
+                        CompareSpan(expected, token);
+                        break;
+                    case 1:
+                        Assert.That(token.Length, Is.EqualTo(0));
+                        break;
+                    case 2:
+                        Assert.That(token.Length, Is.EqualTo(0));
+                        break;
+                    case 3:
+                        Assert.That(token.Length, Is.EqualTo(0));
+                        break;
+                    case 4:
+                        expected = "EUR -0.56";
+                        CompareSpan(expected, token);
+                        break;
+                    case 5:
+                        expected = "-0,56";
+                        CompareSpan(expected, token);
+                        break;
+
+                }
+
+                index++;
+            }
+            Assert.That(index, Is.EqualTo(6));
+        }
+
+        public void CompareSpan(String expected, ReadOnlySpan<char> actual)
+        {
+            if (actual.Length != expected.Length || !actual.ToString().Equals(expected))
+            {
+                String msg = $"Expected {expected}, actual:{actual.ToString()}";
+                Assert.Fail(msg);
+            }
+
+            Console.WriteLine(actual.ToString());
+        }
     }
 }

@@ -11,10 +11,10 @@ namespace TopCsvTests
     public class PortfolioEntry : CsvBaseRecord
     {
         [CsvField(Header = "Produkt", Converter = TopCsvConverterTypes.StringConverter)]
-        public String Product { get; set; }
+        public String? Product { get; set; }
 
         [CsvField(Header = "Symbol/ISIN", Converter = TopCsvConverterTypes.StringConverter)]
-        public String SymbolISIN { get; set; }
+        public String? SymbolISIN { get; set; }
 
         [CsvField(Header = "Anzahl", Converter = TopCsvConverterTypes.IntConverter, AllowEmpty = true)]
         public Int32 Number { get; set; }
@@ -29,7 +29,7 @@ namespace TopCsvTests
             Header = "Wert",
             Converter = TopCsvConverterTypes.MoneyConverterCurrencyDot,
             AllowEmpty = true)]
-        public Money Value { get; set; }
+        public Money MoneyAmount { get; set; }
 
         [CsvField(
             Header = "Wert in EUR",
@@ -55,10 +55,21 @@ namespace TopCsvTests
         {
             TopCsv topCsv = new TopCsv();
             var results = topCsv.Get<PortfolioEntry>(new ReaderForTests(lines)).ToList();
+
             Assert.That(results.Count(), Is.EqualTo(3));
-            Assert.That("US00724F1012", Is.EqualTo(results[0].SymbolISIN));
-            Assert.That(123.45M, Is.EqualTo(results[0].ClosingPrice));
-            Assert.That(123.45M, Is.EqualTo(results[0].Value.Amount));
+            
+            Assert.That(-0.56M, Is.EqualTo(results[0].MoneyAmount.Amount));
+            Assert.That(results[0].MoneyAmount.Currency, Is.EqualTo(Currency.EUR));
+
+            Assert.That(results[0].ValueInEUR, Is.EqualTo(-0.56M));
+           
+            Assert.That(results[1].SymbolISIN, Is.EqualTo("US00724F1012"));
+            Assert.That(results[1].ClosingPrice, Is.EqualTo(123.45M));
+            Assert.That(results[1].MoneyAmount.Amount, Is.EqualTo(1234.12M));
+
+            Assert.That(results[2].SymbolISIN, Is.EqualTo("US0090661010"));
+            Assert.That(results[2].ClosingPrice, Is.EqualTo(12.05M));
+            Assert.That(results[2].MoneyAmount.Amount, Is.EqualTo(123.30M));
         }
 
     }
