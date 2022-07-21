@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1CDB2380-9646-457F-B35D-0A2894AD526F}"
 	ProjectSection(SolutionItems) = preProject
 		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalFileSystemApi", "paket-files\github.com\devdimi\SimpleFileSystemAbstraction\MinimalFileSystemApi\MinimalFileSystemApi.csproj", "{185FC2A6-0A71-4861-8949-4A519CCBA862}"
