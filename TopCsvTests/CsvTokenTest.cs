@@ -10,10 +10,34 @@ namespace TopCsvTests
     [TestFixture]
     public class CsvTokenTest
     {
-        // ,,3 -> e, e, 3
-        // ,3  -> e ,3
-        // 3,  -> 3, e
-        // 1,2 -> 1 + 2
+
+        [Test]
+        public void TestNoSeparator()
+        {
+            String line = "token";
+            var tokens = line.GetTokens(new[] { ',' }, new char[] { });
+            int index = 0;
+            foreach (var token in tokens)
+            {
+                Console.WriteLine(token.ToString());
+                switch (index)
+                {
+                    case 0:
+                        Assert.That(token.ToString(), Is.EqualTo("token"));
+                        break;
+                }
+
+                index++;
+            }
+            Assert.That(index, Is.EqualTo(1));
+
+        }
+
+
+            // ,,3 -> e, e, 3
+            // ,3  -> e ,3
+            // 3,  -> 3, e
+            // 1,2 -> 1 + 2
 
 
         [Test]

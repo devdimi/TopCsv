@@ -30,6 +30,7 @@
         // Needed to be compatible with the foreach operator
         public CsvTokensEnumerator GetEnumerator() => this;
         public ReadOnlySpan<char> Current { get; private set; }
+        bool tokenFound = false;
 
         public bool MoveNext()
         {
@@ -53,7 +54,7 @@
                     }
 
                     this.Current = CreateNewSlice(span, startOfToken, i);
-
+                    tokenFound = true;
                     return true;
                 }
                 else if (this.escapechars.Contains(span[i]))
@@ -68,9 +69,19 @@
                     if(i == this._str.Length - 1 && !inToken)
                     {
                         this.Current = CreateNewSlice(span, startOfToken, i);
+                        tokenFound = true;
                         return true;
                     }
                 }
+            }
+
+            if(!tokenFound && span.Length > 0)
+            {
+                //// one token, no separators
+                this.Current = span.Slice(0, span.Length);
+                this._str = new ReadOnlySpan<char>(); 
+                this.tokenFound = true;
+                return true;
             }
 
             return false;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TopCsvProject.Converter;
 
 namespace TopCsvProject
 {
@@ -18,6 +19,7 @@ namespace TopCsvProject
             { TopCsvConverterTypes.StringConverter, new StringConverter() },
             { TopCsvConverterTypes.MoneyConverterNoCurrencyComma, new DecimalConverterComma() },
             { TopCsvConverterTypes.MoneyConverterCurrencyDot, new MoneyConverter() },
+            { TopCsvConverterTypes.DateConverterDD_MM_YYYY, new DateConverterDD_MM_YYYY(new ConsoleLogger()) },
         };
 
         public TopCsv(CsvOptions options)
