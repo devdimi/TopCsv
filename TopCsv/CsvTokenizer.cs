@@ -1,4 +1,6 @@
-﻿namespace TopCsvProject
+﻿using System.Collections;
+
+namespace TopCsvProject
 {
     public static class StringExtensions
     {
@@ -19,8 +21,6 @@
         char[] separators;
         char[] escapechars;
         public ReadOnlySpan<char> Current { get; private set; }
-
-        bool tokenFound = false;
 
         public CsvTokensEnumerator(ReadOnlySpan<char> stringToTokenize, char[] separators, char[] escapechars)
         {
@@ -56,7 +56,6 @@
                     }
 
                     this.Current = CreateNewSlice(span, startOfToken, i);
-                    tokenFound = true;
                     return true;
                 }
                 else if (this.escapechars.Contains(span[i]))
@@ -71,7 +70,6 @@
                     if(i == this.remainingStringToTokenize.Length - 1 && !inToken)
                     {
                         this.Current = CreateNewSlice(span, startOfToken, i);
-                        tokenFound = true;
                         return true;
                     }
                 }
@@ -82,7 +80,6 @@
                 //// one token, no separators
                 this.Current = span.Slice(0, span.Length);
                 this.remainingStringToTokenize = new ReadOnlySpan<char>(); 
-                this.tokenFound = true;
                 return true;
             }
 

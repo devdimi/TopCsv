@@ -15,7 +15,7 @@ namespace TopCsvProject
         StringConverter,
 
         /// <summary> 123,45 </summary>
-        MoneyConverterNoCurrencyComma,
+        DecimalConverter,
 
         /// <summary> "USD 124.45" or "EUR 123.32" </summary>
         MoneyConverterCurrencyDot,
@@ -23,6 +23,8 @@ namespace TopCsvProject
         /// <summary> Convert Date in format '29-06-2022' </summary>
         DateConverterDD_MM_YYYY,
 
-        TimeConverter
+        TimeConverter,
+
+        CurrencyEnumConverter
     }
 }

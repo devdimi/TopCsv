@@ -11,11 +11,11 @@ namespace TopCsvProject
         {
             { TopCsvConverterTypes.IntConverter, new Int32Converter() },
             { TopCsvConverterTypes.StringConverter, new StringConverter() },
-            { TopCsvConverterTypes.MoneyConverterNoCurrencyComma, new DecimalConverterComma() },
+            { TopCsvConverterTypes.DecimalConverter, new DecimalConverterComma() },
             { TopCsvConverterTypes.MoneyConverterCurrencyDot, new MoneyConverter() },
             { TopCsvConverterTypes.DateConverterDD_MM_YYYY, new DateConverterDD_MM_YYYY(new ConsoleLogger()) },
             { TopCsvConverterTypes.TimeConverter, new TimeConverter(new ConsoleLogger()) },
-
+            { TopCsvConverterTypes.CurrencyEnumConverter,  new CurrencyEnumConverter() },
         };
 
         public TopCsv(CsvOptions options)

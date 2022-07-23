@@ -20,12 +20,33 @@ Datum,Uhrzeit,Produkt,ISIN,Referenzbörse,Ausführungsort,Anzahl,Kurs,,Wert in L
 
     public class Transaction : CsvBaseRecord
     {
-        [CsvField(AllowEmpty =false, Converter = TopCsvConverterTypes.DateConverterDD_MM_YYYY, Header = "Datum")]
+        [CsvField(AllowEmpty = false, Converter = TopCsvConverterTypes.DateConverterDD_MM_YYYY, Header = "Datum")]
         public DateTime Date { get; set; }
 
         [CsvField(AllowEmpty = false, Converter = TopCsvConverterTypes.TimeConverter, Header = "Uhrzeit")]
         public DateTime Time { get; set; }
 
+        [CsvField(AllowEmpty = false, Converter = TopCsvConverterTypes.StringConverter, Header = "ISIN")]
+        public String ISIN {  get; set; }
+
+        [CsvField(AllowEmpty = false, Converter = TopCsvConverterTypes.StringConverter, Header = "Referenzbörse")]
+        public String Exchange { get; set; }
+
+        [CsvField(AllowEmpty = true, Converter = TopCsvConverterTypes.StringConverter, Header = "Ausführungsort")]
+        public String Place { get; set; }
+
+
+        [CsvField(AllowEmpty = false, Converter = TopCsvConverterTypes.IntConverter, Header = "Anzahl")]
+        public String NumShares { get; set; }
+
+        [CsvField(AllowEmpty = true, Converter = TopCsvConverterTypes.DecimalConverter, Header = "Kurs")]
+        public decimal Price { get; set; }
+
+        [CsvField(AllowEmpty = true, Converter = TopCsvConverterTypes.CurrencyEnumConverter, Header = "")]
+        public Currency Currency { get; set; }
+
+        [CsvField(AllowEmpty = true, Converter = TopCsvConverterTypes.TimeConverter, Header = "Wert in Lokalwährung")]
+        public Currency ValueCurrency { get; set; }
     }
 
     [TestFixture]
@@ -33,7 +54,23 @@ Datum,Uhrzeit,Produkt,ISIN,Referenzbörse,Ausführungsort,Anzahl,Kurs,,Wert in L
     {
 
         [Test]
-        public void Import()
+        public void ImportDate()
+        {
+            TopCsv topCsv = new TopCsv();
+            ReaderForTests reader = new ReaderForTests("Datum,Uhrzeit", "29-06-2022,00:00", "20-06-2022,17:25");
+            var list = topCsv.Get<Transaction>(reader).ToList();
+            Assert.AreEqual(2, list.Count());
+            Assert.AreEqual(new DateTime(2022, 6, 29), list[0].Date);
+            Assert.AreEqual(0, list[0].Time.Hour);
+            Assert.AreEqual(0, list[0].Time.Minute);
+
+            Assert.AreEqual(new DateTime(2022, 6, 20), list[1].Date);
+            Assert.AreEqual(17, list[1].Time.Hour);
+            Assert.AreEqual(25, list[1].Time.Minute);
+        }
+
+        [Test]
+        public void ImportTransaction()
         {
             TopCsv topCsv = new TopCsv();
             ReaderForTests reader = new ReaderForTests("Datum,Uhrzeit", "29-06-2022,00:00", "20-06-2022,17:25");
