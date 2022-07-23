@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TopCsvProject
+﻿namespace TopCsvProject
 {
+    public enum ParseMode
+    {
+        BreakOnFirstError,
+        ParseWhatIsPossibleLogErrors
+    }
+
     /// <summary>Class that specifies csv read options</summary>
     public class CsvOptions
     {
@@ -19,6 +19,7 @@ namespace TopCsvProject
         /// used when value contains e.g. the separator char</summary>
         public char[] EscapeChars { get; set; }
 
-
+        /// <summary>Gets or sets the parse mode </summary>
+        public ParseMode ParseMode { get; set; }
     }
 }

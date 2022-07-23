@@ -22,5 +22,7 @@ namespace TopCsvProject
 
         /// <summary> Convert Date in format '29-06-2022' </summary>
         DateConverterDD_MM_YYYY,
+
+        TimeConverter
     }
 }

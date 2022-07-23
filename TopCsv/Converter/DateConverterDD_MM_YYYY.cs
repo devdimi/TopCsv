@@ -1,55 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TopCsvProject.Converter
+﻿namespace TopCsvProject
 {
-    public class DateTimeLineConverter : IFormatProvider
-    {
-        public object? GetFormat(Type? formatType)
-        {
-            if(formatType.Name == "DateTimeFormatInfo")
-            {
-                return "dd-MM-YYYY";
-            }
-
-            throw new NotSupportedException();
-        }
-    }
-
-    public interface ILogger
-    {
-        void Log(LogFlags flags, String msg);
-    }
-
-    [Flags]
-    public enum LogFlags
-    {
-        ParseError,
-        DateError
-    }
-
-    public class ConsoleLogger : ILogger
-    {
-        public void Log(LogFlags flags, String msg)
-        {
-            Console.WriteLine(msg);
-        }
-    }
-
     public class DateConverterDD_MM_YYYY : IConverter<DateTime>
     {
         public object Default => default(DateTime);
 
-        CultureInfo cultureInfo;
-        ILogger logger;
+        ITopCsvLogger logger;
 
-        public DateConverterDD_MM_YYYY(ILogger logger)
+        public DateConverterDD_MM_YYYY(ITopCsvLogger logger)
         {
-            this.cultureInfo = new CultureInfo("de-DE");
             this.logger = logger;
         }
 

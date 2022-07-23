@@ -10,6 +10,29 @@ namespace TopCsvTests
     [TestFixture]
     public class CsvTokenTest
     {
+        [Test]
+        public void TestTwoTokens()
+        {
+            ////"20-06-2022,17:25"
+            String line = "20-06-2022,17:25";
+            var tokens = line.GetTokens(new[] { ',' }, new char[] { });
+            int index = 0;
+            foreach (var token in tokens)
+            {
+                Console.WriteLine(token.ToString());
+                switch (index)
+                {
+                    case 0:
+                        Assert.That(token.ToString(), Is.EqualTo("20-06-2022"));
+                        break;
+                    case 1:
+                        Assert.That(token.ToString(), Is.EqualTo("17:25"));
+                        break;
+                }
+                index++;
+            }
+            Assert.That(index, Is.EqualTo(2));
+        }
 
         [Test]
         public void TestNoSeparator()

@@ -22,6 +22,10 @@ Datum,Uhrzeit,Produkt,ISIN,Referenzbörse,Ausführungsort,Anzahl,Kurs,,Wert in L
     {
         [CsvField(AllowEmpty =false, Converter = TopCsvConverterTypes.DateConverterDD_MM_YYYY, Header = "Datum")]
         public DateTime Date { get; set; }
+
+        [CsvField(AllowEmpty = false, Converter = TopCsvConverterTypes.TimeConverter, Header = "Uhrzeit")]
+        public DateTime Time { get; set; }
+
     }
 
     [TestFixture]
@@ -32,11 +36,16 @@ Datum,Uhrzeit,Produkt,ISIN,Referenzbörse,Ausführungsort,Anzahl,Kurs,,Wert in L
         public void Import()
         {
             TopCsv topCsv = new TopCsv();
-            ReaderForTests reader = new ReaderForTests("Datum", "29-06-2022", "20-06-2022");
+            ReaderForTests reader = new ReaderForTests("Datum,Uhrzeit", "29-06-2022,00:00", "20-06-2022,17:25");
             var list = topCsv.Get<Transaction>(reader).ToList();
             Assert.AreEqual(2, list.Count());
             Assert.AreEqual(new DateTime(2022, 6, 29), list[0].Date);
+            Assert.AreEqual(0, list[0].Time.Hour);
+            Assert.AreEqual(0, list[0].Time.Minute);
+
             Assert.AreEqual(new DateTime(2022, 6, 20), list[1].Date);
+            Assert.AreEqual(17, list[1].Time.Hour);
+            Assert.AreEqual(25, list[1].Time.Minute);
         }
     }
 }

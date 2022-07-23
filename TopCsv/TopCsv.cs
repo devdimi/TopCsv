@@ -1,11 +1,5 @@
-﻿using MinimalFileSystemApi;
-using MinimalFileSystemApi.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TopCsvProject.Converter;
+﻿using MinimalFileSystemApi.Interfaces;
+
 
 namespace TopCsvProject
 {
@@ -20,6 +14,8 @@ namespace TopCsvProject
             { TopCsvConverterTypes.MoneyConverterNoCurrencyComma, new DecimalConverterComma() },
             { TopCsvConverterTypes.MoneyConverterCurrencyDot, new MoneyConverter() },
             { TopCsvConverterTypes.DateConverterDD_MM_YYYY, new DateConverterDD_MM_YYYY(new ConsoleLogger()) },
+            { TopCsvConverterTypes.TimeConverter, new TimeConverter(new ConsoleLogger()) },
+
         };
 
         public TopCsv(CsvOptions options)

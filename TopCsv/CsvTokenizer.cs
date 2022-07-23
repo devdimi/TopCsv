@@ -15,27 +15,29 @@
     /// </summary>
     public ref struct CsvTokensEnumerator
     {
-        private ReadOnlySpan<char> _str;
+        private ReadOnlySpan<char> remainingStringToTokenize;
         char[] separators;
         char[] escapechars;
+        public ReadOnlySpan<char> Current { get; private set; }
 
-        public CsvTokensEnumerator(ReadOnlySpan<char> str, char[] separators, char[] escapechars)
+        bool tokenFound = false;
+
+        public CsvTokensEnumerator(ReadOnlySpan<char> stringToTokenize, char[] separators, char[] escapechars)
         {
-            _str = str;
-            Current = default;
+            this.remainingStringToTokenize = stringToTokenize;
+            this.Current = default;
             this.separators = separators;
             this.escapechars = escapechars;
         }
 
         // Needed to be compatible with the foreach operator
         public CsvTokensEnumerator GetEnumerator() => this;
-        public ReadOnlySpan<char> Current { get; private set; }
-        bool tokenFound = false;
+        
 
         public bool MoveNext()
         {
             bool inToken = false;
-            ReadOnlySpan<char> span = this._str;
+            ReadOnlySpan<char> span = this.remainingStringToTokenize;
             int startOfToken = 0;
             
             if (span.Length == 0)
@@ -66,7 +68,7 @@
                         startOfToken = i + 1;
                     }
 
-                    if(i == this._str.Length - 1 && !inToken)
+                    if(i == this.remainingStringToTokenize.Length - 1 && !inToken)
                     {
                         this.Current = CreateNewSlice(span, startOfToken, i);
                         tokenFound = true;
@@ -75,11 +77,11 @@
                 }
             }
 
-            if(!tokenFound && span.Length > 0)
+            if(span.Length > 0)
             {
                 //// one token, no separators
                 this.Current = span.Slice(0, span.Length);
-                this._str = new ReadOnlySpan<char>(); 
+                this.remainingStringToTokenize = new ReadOnlySpan<char>(); 
                 this.tokenFound = true;
                 return true;
             }
@@ -96,7 +98,7 @@
             if (length == 0)
             {
                 Current = new ReadOnlySpan<char>();
-                this._str = span.Slice(i + 1);
+                this.remainingStringToTokenize = span.Slice(i + 1);
                 return Current;
             }
 
@@ -116,11 +118,11 @@
             {
                 /// special handling of case "3," ending with separator
                 /// in this case we keep the separator to emit one more empty token
-                this._str = span.Slice(startOfToken);
+                this.remainingStringToTokenize = span.Slice(startOfToken);
             }
             else
             {
-                this._str = span.Slice(startOfToken + 1);
+                this.remainingStringToTokenize = span.Slice(startOfToken + 1);
             }
 
             return Current;
