@@ -6,7 +6,7 @@
     <Nullable>annotations</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\paket-files\github.com\devdimi\SimpleFileSystemAbstraction\MinimalFileSystemApi\MinimalFileSystemApi.csproj" />
+    <PackageReference Include="devdimi.MinimalFileSystemApi" Version="1.0.0" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
