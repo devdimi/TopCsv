@@ -14,5 +14,7 @@ namespace TopCsvProject
         public TopCsvConverterTypes Converter { get; set; }
 
         public Boolean AllowEmpty { get; set; }
+
+        public String Description { get; set; }
     }
 }

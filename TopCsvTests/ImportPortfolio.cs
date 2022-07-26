@@ -21,7 +21,7 @@ namespace TopCsvTests
 
         [CsvField(
             Header = "Schlußkurs", 
-            Converter = TopCsvConverterTypes.DecimalConverter, 
+            Converter = TopCsvConverterTypes.DecimalConverterComma, 
             AllowEmpty = true)]
         public decimal ClosingPrice { get; set; }
 
@@ -33,7 +33,7 @@ namespace TopCsvTests
 
         [CsvField(
             Header = "Wert in EUR",
-            Converter = TopCsvConverterTypes.DecimalConverter,
+            Converter = TopCsvConverterTypes.DecimalConverterComma,
             AllowEmpty = true)]
         public decimal ValueInEUR { get; set; }
     }

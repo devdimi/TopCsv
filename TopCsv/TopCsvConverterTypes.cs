@@ -15,7 +15,10 @@ namespace TopCsvProject
         StringConverter,
 
         /// <summary> 123,45 </summary>
-        DecimalConverter,
+        DecimalConverterComma,
+
+        /// <summary> 123.45 </summary>
+        DecimalConverterDot,
 
         /// <summary> "USD 124.45" or "EUR 123.32" </summary>
         MoneyConverterCurrencyDot,

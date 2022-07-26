@@ -11,7 +11,8 @@ namespace TopCsvProject
         {
             { TopCsvConverterTypes.IntConverter, new Int32Converter() },
             { TopCsvConverterTypes.StringConverter, new StringConverter() },
-            { TopCsvConverterTypes.DecimalConverter, new DecimalConverterComma() },
+            { TopCsvConverterTypes.DecimalConverterComma, new DecimalConverterComma(DecimalSeparator.Comma) },
+            { TopCsvConverterTypes.DecimalConverterDot, new DecimalConverterComma(DecimalSeparator.Dot) },
             { TopCsvConverterTypes.MoneyConverterCurrencyDot, new MoneyConverter() },
             { TopCsvConverterTypes.DateConverterDD_MM_YYYY, new DateConverterDD_MM_YYYY(new ConsoleLogger()) },
             { TopCsvConverterTypes.TimeConverter, new TimeConverter(new ConsoleLogger()) },
