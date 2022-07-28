@@ -24,7 +24,7 @@ namespace TopCsvTests
         public void Import()
         {
             TopCsv topCsv = new TopCsv();
-            var results = topCsv.Get<PortfolioEntry>(new ReaderForTests(lines)).ToList();
+            var results = topCsv.Get<PortfolioEntryDegiro>(new ReaderForTests(lines)).ToList();
 
             Assert.That(results.Count(), Is.EqualTo(3));
             

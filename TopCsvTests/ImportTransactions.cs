@@ -21,7 +21,7 @@ namespace TopCsvTests
                 "29-06-2022,00:00,SHOPIFY INC. CLASS A S,CA82509L1076,NSY,,60,35.0260,USD,-2101.56,USD,-2014.13,EUR,1.0434,,,-2014.13,EUR,",
                 "29-06-2022,00:00,SHOPIFY INC. CLASS A S,CA82509L1076,NSY,,-6,350.2600,USD,2101.56,USD,2014.13,EUR,1.0434,,,2014.13,EUR",
                 "20-05-2022,17:25,CONFLUENT INC. - CLASS A COMMON STOCK, US20717M1036, NDQ, ARCX,4,17.9900, USD,-71.96, USD,-68.22, EUR,1.0549,-0.50, EUR,-68.72, EUR,12cb1021-f15d-4fbe-b1e7-46761af52029");
-            var list = topCsv.Get<Transaction>(reader).ToList();
+            var list = topCsv.Get<TransactionDegiro>(reader).ToList();
             Assert.AreEqual(3, list.Count());
             Assert.AreEqual(new DateTime(2022, 6, 29), list[0].Date);
 
@@ -51,7 +51,7 @@ namespace TopCsvTests
         {
             TopCsv topCsv = new TopCsv();
             ReaderForTests reader = new ReaderForTests("Datum,Uhrzeit", "29-06-2022,00:00", "20-06-2022,17:25");
-            var list = topCsv.Get<Transaction>(reader).ToList();
+            var list = topCsv.Get<TransactionDegiro>(reader).ToList();
             Assert.AreEqual(2, list.Count());
             Assert.AreEqual(new DateTime(2022, 6, 29), list[0].Date);
             Assert.AreEqual(0, list[0].Time.Hour);

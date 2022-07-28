@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TopCsvProject
 {
-    public class PortfolioEntry : CsvBaseRecord
+    public class PortfolioEntryDegiro : CsvBaseRecord
     {
         [CsvField(Header = "Produkt", Converter = TopCsvConverterTypes.StringConverter)]
         public String? Product { get; set; }

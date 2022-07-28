@@ -26,6 +26,9 @@ namespace TopCsvProject
         /// <summary> Convert Date in format '29-06-2022' </summary>
         DateConverterDD_MM_YYYY,
 
+        /// <summary> Convert Date in format '2021-07-05 14:04:38' </summary>
+        DateConverterYYYY_MM_DD_HH_mm_SS,
+
         TimeConverter,
 
         CurrencyEnumConverter

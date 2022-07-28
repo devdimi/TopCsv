@@ -13,7 +13,7 @@ Datum,Uhrzeit,Produkt,ISIN,Referenzbörse,Ausführungsort,Anzahl,Kurs,,Wert in L
 */
 
     /// <summary>Transaction as exported by degiro.</summary>
-    public class Transaction : CsvBaseRecord
+    public class TransactionDegiro : CsvBaseRecord
     {
         [CsvField(AllowEmpty = false, Converter = TopCsvConverterTypes.DateConverterDD_MM_YYYY, Header = "Datum")]
         public DateTime Date { get; set; }
