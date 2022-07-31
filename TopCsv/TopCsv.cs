@@ -69,7 +69,7 @@ namespace TopCsvProject
             String line;
             while(null != (line = reader.ReadLine())) 
             {
-                CsvTokensEnumerator enumerator = 
+                CsvTokensEnumerator columnEnumerator = 
                     new CsvTokensEnumerator(
                         line, 
                         this.options.Separators,
@@ -77,15 +77,15 @@ namespace TopCsvProject
                         );
                 Int32 i = 0;
                 T entry = new T();
-                while (enumerator.MoveNext())
+                while (columnEnumerator.MoveNext())
                 {
-                    ReadOnlySpan<char> part = enumerator.Current;
+                    ReadOnlySpan<char> currentColumn = columnEnumerator.Current;
                     object convertedValue = null;
                     if (attributes[i].Converter != TopCsvConverterTypes.None)
                     {
-                        if (!part.IsEmpty)
+                        if (!currentColumn.IsEmpty)
                         {
-                            convertedValue = this.map[attributes[i].Converter].FromString(part);
+                            convertedValue = this.map[attributes[i].Converter].FromString(currentColumn);
                         }
                         else
                         {
